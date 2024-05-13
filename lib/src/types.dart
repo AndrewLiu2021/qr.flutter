@@ -60,7 +60,7 @@ enum QrDataModuleShape {
 @immutable
 class QrEyeStyle {
   /// Create a new set of styling options for QR Eye.
-  const QrEyeStyle({this.eyeShape, this.color});
+  const QrEyeStyle({this.eyeShape, this.color, this.finderPatternShader});
 
   /// Eye shape.
   final QrEyeShape? eyeShape;
@@ -68,8 +68,10 @@ class QrEyeStyle {
   /// Color to tint the eye.
   final Color? color;
 
+  final QrFinderPatternShader? finderPatternShader;
+
   @override
-  int get hashCode => eyeShape.hashCode ^ color.hashCode;
+  int get hashCode => eyeShape.hashCode ^ color.hashCode ^ finderPatternShader.hashCode;
 
   @override
   bool operator ==(Object other) {
@@ -137,4 +139,25 @@ class QrEmbeddedImageStyle {
     }
     return false;
   }
+}
+
+class QrFinderPatternShader {
+  QrEyeShapeShader? topLeft;
+  QrEyeShapeShader? topRight;
+  QrEyeShapeShader? bottomLeft;
+  QrFinderPatternShader.only({this.topLeft, this.topRight, this.bottomLeft});
+
+  QrFinderPatternShader.all(QrEyeShapeShader shader) {
+    topLeft = shader;
+    topRight = shader;
+    bottomLeft = shader;
+  }
+}
+
+@immutable
+class QrEyeShapeShader {
+  final Offset begin;
+  final Offset end;
+  final List<Color> colors;
+  const QrEyeShapeShader(this.begin, this.end, this.colors);
 }
